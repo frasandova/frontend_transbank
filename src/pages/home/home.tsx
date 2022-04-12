@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios';
 
-const homeImages = require.context('../../assets/home'); //Contenido Dinamico
-
 export const Home = () => {
   
 
@@ -42,7 +40,7 @@ export const Home = () => {
       console.log('formState', formState);
       console.log('Envio Form')
       
-      //Envio Formulario
+      //Envio Formularioassets/home
       document.forms[0].submit();
 
       
