@@ -3,13 +3,24 @@ import axios from 'axios';
 
 export const Home = () => {
   
-
-  const [formState, setFormState] = useState({
+ const [tokenTransbak, setTokenTransbak] = useState("")
+ const [formState, setFormState] = useState({
     monto: 0,
     token_ws:''
   });
 
   const { monto, token_ws } = formState;
+  
+  useEffect(() => {
+    console.log('Entro Home')
+  }, [])
+
+// useEffect(() => {
+//   if(tokenTransbak!= "" && tokenTransbak===token_ws){
+//     document.forms[0].submit();
+//   }
+// }, [tokenTransbak])
+
 
   const handlerInputChange = ({target}:any) => {
 
@@ -36,19 +47,31 @@ export const Home = () => {
       //  let form : HTMLFormElement = document.forms.namedItem("formActiosPostTransbank")
       // form.submit();
 
-      await makeGetRequest();
-      console.log('formState', formState);
-      console.log('Envio Form')
+      if(monto){
+        document.forms[0].submit();
+      }else{
+        console.log('error')
+      }
+
+      // await makePostRequest();
+      // await makePostTransactionRequest();
+      // console.log('formState', formState);
+      // console.log('Envio Form')
       
       //Envio Formularioassets/home
-      document.forms[0].submit();
+      // console.log('token_ws', token_ws)
+      // if(token_ws){
+      //   document.forms[0].submit();
+      // }else{
+      //   console.log('error')
+      // }
 
       
       
     }
   }
 
-  const makeGetRequest = async () => {
+  const makePostRequest = async () => {
 
     // let res = await axios.post('http://webcode.me');
     let body = {monto};
@@ -72,6 +95,7 @@ export const Home = () => {
         ...formState,
         token_ws : token
       })
+      setTokenTransbak(token);
     })
     .catch(error => {
         console.error('There was an error!', error);
@@ -81,10 +105,35 @@ export const Home = () => {
     // console.log(data);
   }
 
+  const makePostTransactionRequest = async () => {
+
+    // let res = await axios.post('http://webcode.me');
+    let body = {monto};
+    await axios.get('http://localhost:8081/api/transbank/createTransaction', {})
+    .then(response => {
+      console.log('response', response);
+    })
+    .catch(error => {
+        console.error('There was an error!', error);
+    });
+
+    axios({
+  method: "get",
+  url: `https://api.nasa.gov/planetary/apod`,
+  params: {
+    api_key: process.env.NASA_API_KEY,
+  },
+}).then((response) => {
+  console.log(response.data);
+});
+  }
 
   return (
     // <div>Bienvenido al Home</div>
     <>
+        
+     <h1>Home App Music Page</h1>
+     <hr/>
      {/* style="width: 18rem;" */}
      <div className='row'>
       <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -157,28 +206,42 @@ export const Home = () => {
 
     <div className='row justify-content-center'>
       <div className='col-lg-4 col-md-4 col-sm-4 col-xs-4'>
-      <form 
-        method="post" 
-        action="https://webpay3gint.transbank.cl/webpayserver/initTransaction"
-        name="formActiosPostTransbank"
-        id="formActiosPostTransbank"
-      >
-        <input 
-        type="text" 
-        name="monto" 
-        className='form-control'
-        placeholder='monto a pagar'
-        autoComplete='off'
-        onChange={handlerInputChange}
-        value={monto} 
-        />
-        <input type="hidden" 
-        name="token_ws" 
-        value={token_ws} 
-        />
-        <button className="btn btn-primary" type='button' onClick={handlerFormClick}>Transbank</button>
-        {/* <input type="submit" value="Ir a pagar" /> */}
-      </form>
+        <form           
+          action="http://localhost:8081/api/transbank/createTransaction"
+          method="post"
+          name="formActiosPostTransbank"
+          id="formActiosPostTransbank"
+        >
+          <input 
+          type="text" 
+          name="monto" 
+          className='form-control'
+          placeholder='monto a pagar'
+          autoComplete='off'
+          onChange={handlerInputChange}
+          value={monto} 
+          />
+          {/* <input type="hidden" 
+          name="token_ws"
+          value={tokenTransbak}
+          /> */}
+          {/* <button className="btn btn-primary" type='button' onClick={handlerFormClick}>Transbank</button> */}
+            <button
+            disabled = {monto ? false : true} 
+            className="btn btn-primary" 
+            type='button' 
+            onClick={handlerFormClick}>
+            Transbank
+            </button>
+          </form>
+        {/* <form          
+          action= "http://localhost:8081/api/transbank/createTransaction/8888"
+          method="get"
+        >
+          <input type="submit" value="Ir a pagar" />
+        </form> */}
+      
+      
       </div>
 
       <pre>
