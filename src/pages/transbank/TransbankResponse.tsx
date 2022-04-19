@@ -3,34 +3,41 @@ import { useSearchParams } from 'react-router-dom';
 import axios from 'axios'
 
 export const TransbankResponse = () => {
+
+  const [loading, setLoading] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams();
-  const [wsToken, setWsToken] = useState(searchParams.get("token_ws"))
+  const [token, setToken] = useState(searchParams.get("token"))
+  // const [wsResponseCode, setResponseCode] = useState(searchParams.get("response_code"))
+  // const [step, setStep] = useState(searchParams.get("step"))
+  // const [tbkOrdenCompra, setTbkOrdenCompra] = useState(searchParams.get("tbkOrdenCompra"))
+  // const [tbkIdSesion, settbkIdSesion] = useState(searchParams.get("tbkIdSesion"))
+  
   const [stateResponseTransaction, setStateResponseTransaction] = useState({})
-  console.log('token_ws', wsToken)
+  
 
 useEffect(() => {
   console.log('entro useeffect')
-  // makePostCommitTransaction();
+    if(!loading){
+      makeGetCommitTransaction();
+    }
 }, []);
 
 
-    const makePostCommitTransaction = async () => {
-      console.log('makePostCommitTransaction')
-      // let res = await axios.post('http://webcode.me');
-      let body = {
-        "token_ws": wsToken,
-        "TBK_TOKEN": null,
-        "TBK_ORDEN_COMPRA": 1234567,
-        "TBK_ID_SESION": 1234567
-    };
-      await axios.post('http://localhost:8081/api/transbank/commitTransaction',body)
+    const makeGetCommitTransaction = async () => {
+      console.log('makeGetCommitTransaction')
+      setLoading(true);
+      // await axios.get(`http://localhost:8081/api/transbank/getResultTransaction/${token}`)
+      await axios.get(`https://backend-transbank.herokuapp.com/api/transbank/getResultTransaction/${token}`)
       .then(response => {
+        
         console.log('response', response);
         setStateResponseTransaction(response.data)
+        setLoading(false);
 
       })
       .catch(error => {
           console.error('There was an error!', error);
+          setLoading(false);
       });
   }
 

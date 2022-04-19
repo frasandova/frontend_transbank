@@ -75,7 +75,8 @@ export const Home = () => {
 
     // let res = await axios.post('http://webcode.me');
     let body = {monto};
-    await axios.post('http://localhost:8081/api/transbank/createTransaction',body)
+    // await axios.post('http://localhost:8081/api/transbank/createTransaction',body)
+    await axios.post('https://backend-transbank.herokuapp.com/api/transbank/createTransaction',body)
     .then(response => {
       console.log('response', response);
       const { data: { 
@@ -105,28 +106,26 @@ export const Home = () => {
     // console.log(data);
   }
 
-  const makePostTransactionRequest = async () => {
+//   const makePostTransactionRequest = async () => {
+//     let body = {monto};
+//     await axios.get('http://localhost:8081/api/transbank/createTransaction', {})
+//     .then(response => {
+//       console.log('response', response);
+//     })
+//     .catch(error => {
+//         console.error('There was an error!', error);
+//     });
 
-    // let res = await axios.post('http://webcode.me');
-    let body = {monto};
-    await axios.get('http://localhost:8081/api/transbank/createTransaction', {})
-    .then(response => {
-      console.log('response', response);
-    })
-    .catch(error => {
-        console.error('There was an error!', error);
-    });
-
-    axios({
-  method: "get",
-  url: `https://api.nasa.gov/planetary/apod`,
-  params: {
-    api_key: process.env.NASA_API_KEY,
-  },
-}).then((response) => {
-  console.log(response.data);
-});
-  }
+//     axios({
+//   method: "get",
+//   url: `https://api.nasa.gov/planetary/apod`,
+//   params: {
+//     api_key: process.env.NASA_API_KEY,
+//   },
+// }).then((response) => {
+//   console.log(response.data);
+// });
+//   }
 
   return (
     // <div>Bienvenido al Home</div>
@@ -207,11 +206,47 @@ export const Home = () => {
     <div className='row justify-content-center'>
       <div className='col-lg-4 col-md-4 col-sm-4 col-xs-4'>
         <form           
-          action="http://localhost:8081/api/transbank/createTransaction"
+          //action="http://localhost:8081/api/transbank/createTransaction"
+          action="https://backend-transbank.herokuapp.com/api/transbank/createTransaction"
           method="post"
           name="formActiosPostTransbank"
           id="formActiosPostTransbank"
         >
+        <input 
+        type="hidden" 
+        name="rut" 
+        className='form-control'
+        value="1-9" 
+        />
+
+        <input 
+        type="hidden" 
+        name="nombre" 
+        className='form-control'
+        value="Leon" 
+        />
+
+       <input 
+        type="hidden" 
+        name="apellido_paterno" 
+        className='form-control'
+        value="Sandoval" 
+        />
+
+        <input 
+        type="hidden" 
+        name="apellido_materno" 
+        className='form-control'
+        value="Cisternas" 
+        />
+
+        <input 
+        type="hidden" 
+        name="email" 
+        className='form-control'
+        value="frasandova@gmail.com" 
+        />
+
           <input 
           type="text" 
           name="monto" 
@@ -221,6 +256,7 @@ export const Home = () => {
           onChange={handlerInputChange}
           value={monto} 
           />
+
           {/* <input type="hidden" 
           name="token_ws"
           value={tokenTransbak}

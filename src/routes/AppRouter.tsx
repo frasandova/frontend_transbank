@@ -11,7 +11,7 @@ export const AppRouter = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/testpage" element={<TestPage />} />
-      <Route path="transbak-response" element={<TransbankResponse />} />
+      <Route path="/transbank-response" element={<TransbankResponse />} />
       <Route path="*" element={<Home />} />
     </Routes>
   </div>
